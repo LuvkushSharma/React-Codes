@@ -1,0 +1,284 @@
+Lec_1 :- 
+
+First of all type below code in CMD :- 
+
+npm create vite@latest
+
+
+Then type below code :- 
+
+npm i eslint vite-plugin-eslint eslint-c
+
+Now , create a new file named as :- 
+
+.eslintrc.json
+
+Now , type some code in .eslintrc.json
+
+After that modify the code in vite.config.js
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import eslint from 'vite-plugin-eslint'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react(), eslint()],
+})
+
+
+Now , npm run dev
+
+
+
+Lec_2 :- Setting up a professional file structure
+
+Create a folder named as features
+
+Create a new folder for each of the new categories.
+
+Create a new folder for UI Components as there are also some components that are more reusable or that don't really belong in any of the features.
+
+Now , create a services folder for reusable code for interacting with an API. So, in this case with the pizza API 
+
+Then create a "utils" folder for helper functions that can also reuse in multiple places in our application. 
+For stateless helper functions that don't create any side effects for example date or for number manipulations.
+
+Now place starter files in there respective folders.
+
+
+
+Lec_3 :- A New Way of Implementing Routes
+
+npm i react-router-dom
+
+Go to App.js 
+
+And , now we will declare the routes in more imperative way. As we had declared the routes in more declarative way in the world-wise app here we'll use React-Router-DOM latest version.
+
+const router = createBrowserRouter ([
+  {
+    path: '/',
+    element: <Home/>
+
+  },
+  {
+    path: '/menu',
+    element: <Menu/>
+
+  },
+])
+
+As , you can see that no need of enclosing App component in the <BrowserRouter> first then declares routes using <Route> and provide path. But now you can do that thing in much more simpler way with React Router Dom latest version.
+
+So we're declaring the router outside of the JSX and using above JavaScript array. And this is necessary in React Router 6.4 in order to enable data fetching or data loading with React Router. So old way still works even in the modern React Router, but then we cannot use it to load data or to submit data using forms. So all these new data loading capabilities are enabled and are only possible to use when we create a router using this createBrowserRouter function.
+
+Now , continue creating more routes in the above array.
+
+
+
+Lec_4 :- Building the App Layout
+
+Create a new file named as AppLayout.jsx in the ui folder
+
+Also create a file named as Header.jsx in ui folder
+
+Type some code in Header.jsx
+
+Then go to AppLayout.jsx for writing some code and before importing CartOverview.jsx from features/cart folder you just need to change <a> element to <Link>
+
+Now , go to App.jsx and make the AppLayout as the layout route i.e. we didn't provide it's path and rest all other components will be it's children.
+
+So, put all the children routes in an array.
+
+Now , inplace of Content we want to display Cart if we are at /cart route
+and if we are at order route then display Order content there.
+
+<main>
+    <h1>Content</h1>
+</main>
+
+So, we want the replacement of Content with the Child components of AppLayout.jsx
+
+And we can do so, by <Outlet/>
+
+
+
+Lec_5 :- Fetching Data with React-Router "Loaders": Pizza Menu
+
+So the idea behind a loader is that somewhere in our code we create a function that fetches some data from an API. We then provide that loader function to one of our routes and that route will then fetch that data as soon as the application goes to that route. And then in the end, once the data has arrived, it will be provided to the page component itself using a custom hook.
+
+We can load the data in any component but in this case we want the menu data so, let's do that in the Menu.jsx
+
+Now , in step-2 : connect the loader to the route. Go to App.jsx file and connect that Loader
+
+And , now all we have to do is to get that data in the Menu.jsx component.
+
+You'll get the data from below route :- 
+http://localhost:5173/menu
+
+Now , go to Menu.jsx and do something with the loaded data.
+
+⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+
+Imp :-
+
+And effectively what we just did here was to implement or to use a render as you fetch strategy because the nice thing about this is that React Router will actually start fetching the data at the same time as it starts rendering the correct route. So these things really happen at the same time, while what we did before using useEffect was always a fetch on render approach. So basically, we rendered the component first, and then after the component was already rendered is when we then would start to fetch the data. And so that would then create so-called data loading waterfalls, but not here. So here everything really happens at the same time, which is a really nice and really modern thing to do as well. So with this, what we just did, React Router is no longer only responsible for matching component to URLs in the browser but to also provide the data that is necessary for each page.
+
+Problem: Fetching in useEffect means React components render, then fetch. This can lead to slow network waterfalls.
+
+And this Problem is being solved by React Router dom 6.4 version.
+
+⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+
+
+
+Lec_6 :- Displaying a Loading Indicator
+
+So back to the home, then to the cart, which has a link to the menu. And as I click here, you will see that there is a small delay between the click and the data actually arriving. So that's taking some time here. And so during that time, we of course want to display like a loading spinner or some other loading indicator.
+
+We'll use useNavigation hook and with this we will be able to see whether the application is currently idle, whether it is loading or submitting.
+
+And this information is actually for the entire application. So, not just for one page, but really here for entire router.
+
+Go to AppLayout.jsx for applying useNavigation to all the children components.
+
+After printing navigateion we can see a property named as state which tells us the current state.
+
+{state: 'idle', location: undefined, formMethod: undefined, formAction: undefined, formEncType: undefined, …}
+
+And when i click on the Menu then it changes the state from "idle" to "loading" and again to "idle"
+
+const navigation = useNavigation(); 
+const isLoading = navigation.state === "loading";
+
+
+And whenever state is "loading" then we want to display spinner.
+
+So, let's create a new component named as Loader.jsx in ui folder.
+
+
+
+
+
+Lec_7 : Handling Errors with Error Elements
+
+Go to App.jsx 
+
+
+http://localhost:5173/menudhgcgfhfh
+
+So, when you go to some random path then this Error will be shown.
+
+Something went wrong 😢
+%MESSAGE%
+
+← Go back
+
+Now, go to Error.jsx and get the error that has occured.
+
+And , we'll take the help of a Custom Hook from the react-router-dom.
+
+However this error is displaying completely outside of this application and that we donot wants. We want it to appear in the child layouts.
+
+And let's place it in the <Menu/> component as it is the only component that fetches some data.
+
+const API_URL = 'https://react-fast-pizza-api.onrender.com/api';
+
+   ^
+   |
+Now , if you change the API_URL of apiRestaurant.js then you will get the Error.
+
+
+⭐ Error Structure from console
+
+ErrorResponseImpl
+{
+data : "Error: No route matches URL \"/menudhgcgfhfh\""
+
+error : Error: No route matches URL "/menudhgcgfhfh" at getInternalRouterError (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=5baa161d:2923:59) at createRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=5baa161d:1099:17) at createBrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=5baa161d:4342:10) at http://localhost:5173/src/App.jsx?t=1703821330694:25:16
+
+internal: true
+status : 404
+statusText : "Not Found"
+}
+
+So, we can handle Errors using errorElement of the React-Router-dom
+
+
+
+Lec_8 :- Fetching Orders
+
+When we go to this URL 
+
+http://localhost:5173/order/..something
+
+Then we'll get a dummy order there.
+
+Create a file named as SearchOrder.jsx in the /features/order folder
+
+Include this component in the Header.jsx 
+
+Let's create a Loader function right in the Order.jsx
+
+Now , connect the loader in the App.jsx
+
+Now , let's see the fake order using Test Id i.e.
+
+IIDSAT
+
+http://localhost:5173/order/IIDSAT
+
+After typing in the Search order# also we can go to our fake order.
+
+Now , go to Order.jsx and load the data from the loader and delete teh fake order so, that we can get the Order from the API.
+
+
+
+Lec_9 :- Writing Data With React Router "Actions"
+
+When you go to below URL then you'll get a form 
+http://localhost:5173/order/new
+
+And to make this form work nicely with React Router we need to replace this with a form component that React Router gives us.
+
+Go to CreateOrder.jsx file
+
+import { Form } from "react-router-dom";
+
+ <Form method="POST" action="/order/new">
+
+Here action is not necessary as by default react router will simply match the closest route.
+
+After this we need to create Actions in the same way we create Loaders
+
+And , whenever this form is submitted then React Router behind the scenes will use this action function and it will pass in the request that was submitted.
+
+Now go to App.jsx and connect this action to the route.
+
+And so now whenever there will be a new form submission on this route "http://localhost:5173/order/new" here, so on this path, then this action that we specified here will be called.
+
+
+export async function action ({request}) {
+
+    const formData = await request.formData();
+    console.log(formData);
+
+    return null;
+}
+
+formData :- 
+{customer: 'xyz', phone: '1234567890', address: 'zyx'}
+
+
+Next we also want to get our cart data here into this action.
+
+Go to CreateOrder.jsx
+
+<input type="hidden" name='cart' value={JSON.stringify(cart)}/>
+
+Now , when we submit the form then we will get the Cart data as well in the action.
+
+
+
+Lec_10 :- Error Handling in Form Actions

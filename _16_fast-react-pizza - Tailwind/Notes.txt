@@ -1,0 +1,44 @@
+Lec_1 : Install Tailwind using below command
+
+npm install -D tailwindcss postcss autoprefixer
+
+
+After this below command should be run :- 
+
+npx tailwindcss init -p
+
+
+After this paste the code in the content in tailwind.config.js
+
+content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+
+Now paste the below code in the index.css at the very top.
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+Now , to run the application write the below command in the terminal.
+
+npm run dev
+
+
+-----------> Now go to the Home.jsx and style the elements with tailwind.
+
+Now install tailwind prettier extension.
+
+npm install -D prettier prettier-plugin-tailwindcss
+
+    ^
+    |
+  This will sort the tailwind classes in that order in which taailwind suggests.  
+
+Now create a prettier config file and place the below code there.  
+
+Now , we can style the index.html
+
+Create a new file in the user folder named as Username.jsx

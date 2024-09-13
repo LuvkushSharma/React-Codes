@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello React!</title>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <!-- Go to react.dev and then go to learn part and then installation and at the end in "Try React Locally" click on download this HTML Page-->
+
+    <!-- Go to the below link and copy script code. -->
+    <!-- https://gist.githubusercontent.com/gaearon/0275b1e1518599bbeafcde4722e79ed1/raw/db72dcbf3384ee1708c4a07d3be79860db04bff0/example.html -->
+
+    <!-- Core React Library i.e. deals with components , state , useEffect , ....-->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+
+    <!-- React DOM : used for rendering the Components. -->
+
+    <!-- 
+        Now, in that first application that we built, we returned some JSX code. 
+    However, that is not going to work here
+    because well, we don't have the tooling
+    that can convert JSX back to JavaScript.
+    And so here we need to use the create element function.
+    -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <script>
+        function App() {
+
+            // We are getting the React from the First React Script.
+
+            // const time = new Date().toLocaleTimeString();
+
+            // Now , to change the time dynamically we use useState()
+            const [time, setTime] = React.useState(new Date().toLocaleTimeString());
+            
+            React.useEffect(function () {
+
+                setInterval(function () {
+                    setTime(new Date().toLocaleTimeString());
+                }, 1000);
+
+            }, []);
+
+            return React.createElement("header", null, `Hello React! It's ${time}`);
+        }
+
+        // Creating the root element.
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+
+        root.render(React.createElement(App))
+    </script>
+
+</body>
+
+</html>

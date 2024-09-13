@@ -1,0 +1,69 @@
+/*
+
+-------------------- Lec_3 -----------------
+
+.nav {
+
+     background-color: orange;
+}
+
+.nav ul {
+    
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+Created a global class which can be used by another components 
+:global(.test) {
+
+    background-color: red;
+}
+
+Since , css modules add a weird string at the end of the class so, we cannot apply css on the active elements.
+Since , NavLink add a class="active" but we cannot use it writing .nav active
+
+To use it we have make .active as gloabal.
+
+.nav :global(.active) {
+
+    background-color: green;
+}
+
+*/
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.nav a:link,
+.nav a:visited {
+  text-decoration: none;
+  color: var(--color-light--2);
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* CSS Modules feature */
+.nav a:global(.active) {
+  color: var(--color-brand--2);
+}
+
+a.ctaLink:link,
+a.ctaLink:visited {
+  background-color: var(--color-brand--2);
+  color: var(--color-dark--0);
+  padding: 0.8rem 2rem;
+  border-radius: 7px;
+}

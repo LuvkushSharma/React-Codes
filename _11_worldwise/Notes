@@ -1,0 +1,299 @@
+------------  React Router (Third-Party Library) ------------
+
+Use below code for installing eslint 🤙
+
+npm install eslint vite-plugin-eslint eslint-config-react-app --save-dev 
+
+After this create a file named as .eslintrc.json <-- in this file write the below code 👍
+
+{
+
+    "extends": "react-app"
+}
+
+
+Also , update the "vite.config.js" file by writing below code :
+
+export default defineConfig({
+  plugins: [react() , eslint()],
+})
+
+
+Now , if you try to declare a variable and didn't use it then eslint will warn you by underlining it with blue line.
+
+And for running the vite app we just need to type : 
+
+npm run dev
+
+*******************************************************************************************************************
+
+Lec-1 : npm i react-router-dom
+
+After this create four files in the folder pages.
+
+Homepage , Product , Pricing and PageNotFound
+
+type : rfc in all the four files and write Component name there. But in PageNotFound.jsx write Not Found :(
+
+Now , after this write some code in the App.jsx
+
+*******************************************************************************************************************
+
+Lec-2 : Since , we need to type the path manually in the browser i.e. we need an alternative. 
+
+First go to the Homepage.jsx and write the below code :-
+
+<a href="/pricing">Pricing</a> <---- It will reload the whole page 👎📛
+
+So, we need to replace this via <Link/> <--- which comes from React-Router-Dom library
+
+Now , we'll create a folder named as components and there we had created a file named PageNav.jsx which will be our Navbar component.
+
+So, there between the <li> tag we will provide the <Link/> element which will re-direct us to the components without reloading the page. 
+
+Also , include <PageNav/> component in all the components that are available in the pages folder.
+
+Now , we had replaced the <Link> element to the <NavLink/> in the PageNav.jsx as <NavLink/> will also add the active class to that component that is currently rendered.
+
+*******************************************************************************************************************
+
+Lec-3 : We have different ways to style Our components :- 
+
+And , one of them is by using CSS Modules.
+
+Now , we need to style our Navbar i.e. PageNav.jsx and for that we'll create a new file named 
+"PageNav.module.css" 
+as in the "components" folder
+
+So, now "PageNav.module.css" will be our css module for the PageNav.jsx file.
+
+Note : We should not style by writing elements for styling. As , that class will added to all the elements on which we had applied the class
+
+Like we only need to apply the class on first div but we had applied the class on 
+
+div {
+      <--- It will be applied to all the div's
+}
+
+Now , we need to import the css module file in the PageNav.jsx by writing below code
+
+import styles from './PageNav.module.css'
+
+And , now we can access the .nav class by simply just typing : 
+
+className={styles.nav}
+
+And , we can style the ul in the nav by writing below code
+
+.nav ul {
+    
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+
+} <-- By this above css will only be applied to the ul inside the nav
+
+And if you inspect the code then you can see that css modules has given a random class to the nav instead of .nav ul
+
+<nav class="_nav_1aou9_1"></nav>
+
+_nav_1aou9_1 <-- by this developer donot needs to take headache of naming different classes. 😀
+
+Now , create a file named as AppLayout.jsx in the pages folder
+
+Also provide the route to this component in the App.jsx file
+
+After this create a new navigation for this app i.e. create a new file in the components folder named as AppNav.jsx and also create it's CSS Module.
+
+AppNav.module.css
+
+Now , create a new file named as index.css and put the jonas code there and then import it in the main.jsx
+
+We can also create gloabal class using css modules for this we need to add a prefix of 
+
+:global (class_name) {
+
+
+}
+
+Like , we had done in the pageNav.module.css
+
+And , now use that class in the HomePage.jsx
+
+
+***********************************************************************************************************************
+
+Lec-4 : Insert images into the public folder from the Jonas Github
+
+Besides these also take the code of all the files that resides in the pages folder from jonas github.
+
+Create a file named as login.jsx in the pages folder.
+
+Create .module.css files for each of the file in pages folder
+
+After taking code from Jonas Github we had written some code in the Homepage.jsx and PageNav.jsx
+
+Now , create two files Logo.jsx and Logo.module.css and take it's code from jonas github.
+
+At the end we had created the route for the Login.jsx component.
+
+So, go to App.jsx and create the route for Login.jsx
+
+*******************************************************************************************************************
+
+Lec-5 : Building the App Layout
+
+So, take all the Starter files that resides in the component folder in Jonas Github.
+
+*******************************************************************************************************************
+
+Lec_6 : Doing Nested Routing and Index Routing
+
+So, AppLayout component containes three more components i.e. cities , countries and form so, we'll Do nested routing in the App.jsx 
+
+Now , the question arises that how we can display one component inside another component. And , here comes the "Outlet" component provided by the React Router.
+
+Go to Sidebar.jsx and display these components i.e. cities , countries and form in the Sidebar.jsx
+
+Imp :-
+
+Now , firstly when we types ../app/cities
+then It goes to app path then it goes to it's children path and selects the first children i.e. cities and replace <Outlet/> with the <cities/>. You can imagine this as {children} prop i.e. path which matches will be replaced with the children.
+
+An index route is the default child route that is going to be matched if none of these other routes here matches.
+
+http://localhost:5173/app/ ---> In this case none of the child route of AppLayout matches so, in this case if we want to show something then we can use Index route.
+
+So, we can make our homepage as our index route.
+
+Now , go to AppNav.jsx  :- Since we are manually going to cities , countries and from route by typing their path in the URL so, just like main Navbar we will modify the AppNav
+
+*******************************************************************************************************************
+
+Lec_7 :- Implementing the Cities List
+
+Create a new file in the components foder named as CityList.jsx
+
+And , then replace the simple <p> in the App.jsx in the nested routes to actual CityList component.
+
+*******************************************************************************************************************
+
+Lec_8 :- Implementing the Countries List
+
+Create a new file in the components foder named as CountryList.jsx
+
+And , then replace the simple <p> in the App.jsx in the nested routes to actual CountriesList component.
+
+*******************************************************************************************************************
+
+Lec_9 :- Dynamic Routes with URL Parameters
+
+To use params with React Router we basically do it in three steps.
+
+1. We create a new route
+2. Then we link to that route
+3. And , then in that route we read the state from the URL.
+
+Go to App.jsx
+
+
+So, whenever the URL takes this shape here i.e. cities/:something it will render the city component.
+
+step-1 :  <Route path='cities/:id' element={<City/>}/>
+
+step-2 : Go to CityItem.jsx for linking to each item
+
+So, after hovering on the CityItem we can see that a URL is shown at the bottom which contains the id of the city which we had attached.
+
+<Link to={`${id}`}>
+  Each City
+</Link>
+
+
+step-3 : go to City.jsx to get the param data
+
+and to get the param data we will use useParam() hook which was provied by React Router
+
+*******************************************************************************************************************
+
+Lec_10 : Reading and Setting a Query String
+
+Now we will get the Query String.
+
+Go to CityItem.jsx and attach the Query String in URL 
+So, after '?' we can add the Query string
+
+<Link className={styles.cityItem} to={`${id}?lat=${position.lat}`}>
+
+and to add more Query string simply write '&'
+
+<Link className={styles.cityItem} to={`${id}?lat=${position.lat}&lng=${position.lng}`}>
+
+Now , this data is now a global state which we can access from anywhere so, that includes the Map component.
+
+Go to Map.jsx
+
+Now , also use useSearchParams in the City.jsx
+
+So, we can send the data to any page without storing it to any state.
+
+Now , We can also update the Query string by setSearchParams
+
+It will change the Query String In all the Components.
+
+<button onClick={() => {
+
+      setSearchParams({lat : 23, lng: 50});
+      
+}}>Change pos</button>
+
+*******************************************************************************************************************
+
+Lec_11 :- Programmatic Navigation with useNavigate
+
+So programmatic navigation basically means to move to a new URL without the user having to click on any link. And a common use case of this behavior is right after submitting a form.
+
+So many times when the user submits a form, we want them to move to a new page in our application automatically. So without having to click on any link. And so then we can use programmatic navigation to achieve that.
+
+Now in this example, what I want to do is that whenever the user clicks somewhere here in this map container, we then want to move automatically here to the form component.
+
+go to App.jsx and put the <Form/> component on the path="form".
+
+Form is available at :-
+
+http://localhost:5173/app/Form
+
+Now , go to Map.jsx
+
+Declare a Event Listener on the div of Map.jsx and import useNavigate() hook from React Router.
+
+Step-1 : Declare the navigate :- 
+
+const navigate = useNavigate();
+
+Step-2 : Now write the path to which we want to navigate after clicking on the Map's container.
+
+onClick={() => navigate('form')}
+
+So, after onClick we will re-direct to form
+
+Now , we want to simply navigate back which is in fact something that we cannot do just with links but it can be done through navigate.
+
+For this we can create a back button. But , now create a Reusable Button.
+
+Button.jsx
+
+So, use that Button.jsx in <Form/> component for going back to the Map
+
+<Button
+    type="back"
+
+    onClick={(e) => {
+      e.preventDefault();
+      navigate(-1);
+    }}
+>
+
+Since , after clicking on the button in the form the page is reloaded i.e. firstly we need to preventDefault() the page reload.
+
+Then , navigate(-1) means go 1 step back in the Browser's history.

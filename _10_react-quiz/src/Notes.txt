@@ -1,0 +1,262 @@
+Lec-1 : Go to DateCounter.js and use the useReducer() hook there.
+
+Lec_2 : Go to the DateCounter.js and make a well defined reducer function.
+
+Lec_3 : Now , we will start making the Quiz Application.
+
+So, firt go to the App.js and import the required components like Header and also create a new component i.e. Main.js
+
+Lec_4 : Loading Questions from a Fake API
+
+Take the questions.json from Jonas Github and after creating a data folder place that file there.
+
+we can create a fake API using an npm package called json-server
+
+⭐
+npm i json-server
+
+Now to run this json-server we need to add a script in package.json. Since , we are able to do npm start as start command exists in the package.json
+
+⭐
+"scripts" : {
+
+"server": "json-server --watch data/questions.json --port 8000"
+
+}
+
+Here , --watch means we want to watch certain files.
+after that we specify the file location which we want to watch and in the end we specify the port at which our fake API will be live.
+
+Now to run server :-
+
+⭐
+npm run server
+
+And we can see that data at :-
+
+http://localhost:8000/questions
+
+Now , go to App.js and fetch the API data in the useEffect()
+
+Now , after fetching the data we need to store that data in state and we'll use useReducer() here
+
+Lec_5 : Handling Loading , Error and Ready Status.
+
+Creates a new file for Ready status i.e StartScreen.js
+
+Lec_6 : Starting a New Quiz
+
+so, after clicking the Let's start button we want to display the first question here inside the <Main/> component.
+
+{status === 'active' && <Question/>}
+
+So, create a new file named as Question.js
+
+Now , how do we set the status to 'active'. Well , all we have to do is to create basically a new action type in the reducer function which will set the status to active or start.
+
+case 'start':
+return {...currState, status: "active"};
+
+Now , go to StartScreen.js and write onClick() event listener. So, basically whenever user clicks the Let's start button then we suddenly set the status to "active" or "start".
+
+So, for that we need the access of dispatch function in the StartScreen.js
+
+onClick={() => dispatch({type: "start"})}
+
+
+
+Lec_7 : Displaying Questions
+
+So of course, we will not render all the questions at the same time here, but instead, one by one. And so therefore, we need a way of knowing which the current question is. So basically, we need some way of keeping track which question is the current one. And so let's add a new piece of state to our initial state here.
+
+Go to App.js and add a new state i.e. index in the initialState object.
+
+Now , tell the Question component about the current question
+
+currQuestion={questions[index]} --> prop
+
+--> Getting all the four options
+
+{currQuestion.options.map((option) => (
+<button className="btn btn-option" key={option}>{option}</button>
+))}
+
+Now , create a child component of the Question where we place the above code.
+
+But before this place all the components in the components folder.
+
+New component name will be : Options.js
+
+
+
+Lec_8 : Handling New Answers
+
+And you see that basically three things happened. So first, the correct and the wrong answers are displayed.Second, the points that we got were updated. And third, the next button was displayed down here. So basically, when we click on one of these options,
+we need to re-render the screen. And so once again, that means that we need a new piece of state. And so that state should basically store which of the options was selected. So in other words, which was the answer? So answer zero, one, two or three
+
+Go to App.js and add a new state to our initialState object.
+
+Also, create a new action for updating the answer.
+
+After this pass the dispatch() function to the <Option/> component so, that later we can update the answer state.
+
+And also pass the answer that we gave so, that we can then display if the answer that was given was correct or not.
+
+Since , currQuestion contains the property i.e. correctOption. Means we have the access of correctOption of a particular question and then we match it with the answer given by us (stored in the answer state.)
+
+according to the choosen index or correct answer index we had applied the styles.
+
+className={`btn btn-option ${currIndex === answer ? "answer" : ""} ${
+            currIndex === currQuestion.correctOption ? "correct" : "wrong"
+          }`}
+
+Basically after clicking on any option we are applying "answer" css
+
+.answer {
+  transform: translateX(2rem);
+}
+
+i.e. choosen option translates to X by 2rem
+
+css for correct option :- 
+
+.btn-option.correct {
+  background-color: var(--color-theme);
+  border: 2px solid var(--color-theme);
+  color: var(--color-light);
+}
+
+css for wrong option :- 
+
+.btn-option.wrong {
+  background-color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  color: var(--color-darkest);
+}
+
+and once the user clicked the button and answers are shown then user will no longer change the option. Basically we will disable the button.
+
+disabled={answer !== null} ---> means if the answer is still null means we didn't selected any option so, in that case disabled={false}
+
+Now , by this below CSS after getting the question we are getting all the options already painted i.e. correct by blue color and wrong by yellow.
+
+className={`btn btn-option ${currIndex === answer ? "answer" : ""} ${
+            currIndex === currQuestion.correctOption ? "correct" : "wrong"
+          }`}
+
+so, create a variable 
+const hasAnswered = answer !== null
+
+So, basically we only want to apply the above CSS if the user clicked any button.
+
+Now , after selecting the button teh user score should update and that can only be happened by update on the screen that is we need yet another state variable.
+
+Go to App.js and in the initialState create a new state and also action in the reducer function.
+
+const initialState = {
+  questions: [],
+  status: "loading",
+  index: 0,
+  answer: null,
+  points: 0,
+};
+
+Now , we want to update the point as soon as the question is answered i.e. we will update the point in the "newAnswered" action.
+
+case 'newAnswer':
+      
+     const question = currState.questions.at(currState.index);
+
+      return {...currState , answer: action.payload , points: action.payload === question.correctOption ? currState.points + question.points : currState.points}  
+
+const question = currState.questions.at(currState.index);  <---- Getting the current question on which we are currently in our quiz app.
+
+points: action.payload === question.correctOption
+
+i.e. if the above condition is true then add the question points in the currState.points i.e.
+
+currState.points + question.points
+
+else points remain same i.e. currState.points
+
+
+Since , each question has different points i.e. question.points
+
+
+
+Lec_9 : Moving to the Next Question
+
+Moving to the next question means increasing the index state.
+
+So, now create another action in the reducer function i.e. nextQuestion
+
+After this create a new component named as <NextButton/>
+
+<NextButton dispatch={dispatch} answer={answer}/>
+
+passing dispatch so, that we can call the "nextQuestion" action to update the current index.
+
+Also, we are passing the answer i.e. whether the current question is answered or not. If not then next question button will not be displayed.
+
+Now, we are able to move to the next question but next question answers are already visible and answer state is not set to null.
+
+go to the action : "nextQuestion"
+
+and there answer : null
+
+
+
+Lec_10 : Displaying Progress
+
+Create a new Component i.e. Progress.js
+
+
+Lec_11 : Finishing a Quiz
+
+So, when status="finished" then we want to show another component.
+
+Create a component named as FinishScreen.js
+
+So, when index=14 i.e. after last question finishes we want to display the FinishScreen.
+
+When we reach to the last question then Next button should change the status to "finished".
+
+Go to NextButton.js and conditionally do this.
+
+And create a action named as finish in the reducer function.
+
+Now , to calculate the highScore we really want to check it in the finished status. Since , highScore must remembered on re-renders, create a state for it.
+
+
+
+Lec_12 : Restarting a Quiz
+
+Now , create a action i.e. restart which reset all the state to it's initial value.
+
+
+
+Lec_13 : Setting Up a Timer with useEffect()
+
+Create a component and place it just below question component in the App.js
+
+Put NextButton and Timer components inside a Footer component. So, create Footer component alogn with a Timer component.
+
+Create a new state i.e. secondsRemaining
+
+---> Each second we are subtracting 1
+
+case "tick":
+      return {...currState , secondsRemaining: currState.secondsRemaining - 1}
+
+---> if time overs i.e. secondsRemaining === 0 then simply make status = "finished"
+
+case "tick":
+      return {
+        
+        ...currState , secondsRemaining: currState.secondsRemaining - 1, 
+      
+      status: currState.secondsRemaining === 0 ? 'finished' : currState.status
+      
+      }      
+
+We need to calculate the secondsRemaining according to the numQuestions in start phase.      

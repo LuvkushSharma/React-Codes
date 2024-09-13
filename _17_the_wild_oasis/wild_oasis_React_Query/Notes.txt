@@ -1,0 +1,184 @@
+---------------- Lec_1 ---------------
+
+"Setting up React Query"
+
+React Query is used for fetching data and storing that data in the cache memory.
+
+npm i @tanstack/react-query
+
+Now , go to App.jsx and let's set React Query there.
+
+Now , install React Query Dev Tools :- 
+
+npm i @tanstack/react-query-devtools
+
+Now , also include <ReactQueryDevtools> component just below the <QueryClientProvider> component.
+
+
+
+---------------- Lec_2 ---------------
+
+"Fetching Cabin Data"
+
+Now , intead of maunally fetching the cabin's data in a useEffect() like we did in the Cabins.jsx file in the pages folder in the previous section , we will now let React Query do his work.
+
+So, after removing the previous section work now , go to CabinTable.jsx in the features/cabin folder and write some code there.
+
+And , after creating a table in the CabinTable.jsx , now go to CabinRow.jsx and there return jsx for each Cabin.
+
+Now , install date-fns from npm so, that differenceInDays function will be used by the helper.js file in the utils folder.
+
+npm i date-fns
+
+Now , add one more Cabin in the supabase in the Cabin table.
+
+Now , go to App.jsx and change the staleTime from 60sec i.e. 6000 to 0sec i.e. after re-fetching the data our data will become stale.
+
+
+--------------------- Lec_3 ---------------------
+
+"Mutations : Deleting a Cabin"
+
+First of all go to services folder and then apiCabin.js and create a function called deleteCabin() there.
+
+Go to supabase and then API Docs and then go to Delete Rows by scrolling and get the code from there.
+
+Since , we had only given the policy of Reading the data from the cabins. So, go to Authorization section and there go to policies and changes the policy of Cabins table to Delete.
+ 
+For now anyone can delete the table but after implementing the login feature only the authenticated user can delete the table or a row in a table.
+
+Now , before implementing deleting features let's just add some more cabins in the Cabin table in supabase. 
+
+Now , go to CabinRow.jsx and use the Delete button there for deleting the cabins.
+
+useMutate function returns a function named as mutate and that will call the deleteCabin function in the services folder.
+
+const {isLoading: isDeleting , mutate} = useMutation({
+
+      mutationFn: deleteCabin,
+  })
+
+Now , when we click on the delete button then that cabin will be deleted from the database but not reflected here. So, re-load the page and then see the effect.  
+
+So, we can make it special by invalidating the cache onSucces callback. So, here we can tell React Query what to do as soon as the mutation was successful.
+
+Well , We basically want to re-fetch the data here in this situation. And the way this works is by invalidating the cache.
+
+For accessing that we want the invalidateQueries function that resides in the queryClient.
+
+Now, to access the queryClient in the CabinRow.jsx we need to take the help of a special hook i.e. useQueryClient()
+
+
+
+----------------------- Lec_4 ------------------------
+
+"Displaying Toasts (Notifications)"
+
+npm i react-hot-toast
+
+go to App.jsx and include the Toaster and after this go to CabinRow.jsx and include that.
+
+Now, go to AppLayout.jsx 
+
+
+------------------------ Lec_5 -----------------------
+
+"Introducing Another Library: React Hook Form"
+
+Go to Cabin.jsx and add a button for Add new Cabin.
+
+now install react-hook form Library
+
+npm i react-hook-form
+
+Now , go to CreateCabinForm.jsx and create states there.
+
+
+---------------------- Lec_6 -------------------------
+
+"Creating a New Cabin"
+
+So, the form is created now , use it actually to create a new cabin.
+
+Go to apiCabins.js
+
+Now , go to supabase and create a new policy for Cabin table i.e. allowing users to create new cabin.
+So, go to Authentication section just below the Database section and there click on the Policies and create new policy for Cabin table.
+ 
+And , now also create a new policy for the UPDATE. 
+
+After , all we will make all the Cabins policies only possible for the authenticated users.
+
+Now , go to API Docs and then cabins and there take the code for INSERT A ROW
+
+And , then go to apiCabins.js and paste that code there.
+
+Now , go to CreateCabinForm.jsx and use again the React Query Mutation.
+
+
+----------------------- Lec_7 ------------------------
+
+"Handling Form Errors"
+
+Go to CreateCabinForm.jsx and do some validation there.
+
+Added this object while registering the field :- 
+
+{
+   required: "This field is required",
+}
+
+In case if there is one error in one of the validations then handlesubmit will not call this onSubmit function but instead it'll call the second function that we pass in.
+
+So, now if we skip anyone of the field then we'll get this object.
+
+Let's we had skipped RegularPrice and Description then below object we get.
+
+{regularPrice: {…}, description: {…}}description: {type: 'required', message: 'This field is required', ref: textarea#description.sc-crozmw.iXRTUt}regularPrice: {type: 'required', message: 'This field is required', ref: input#regularPrice.sc-dcrmVg.hwcQVe}[[Prototype]]: Object
+
+
+Now , we can also sepcify the min-max in the maxCapacity field.
+
+For discount we can write our own custom validation function i.e. discount cannot be greater RegularPrice.
+
+Since , we need regularPrice in the discount validation then we can get that from the useForm hook. so, calling getValues() will return an object and getting regularPrice from that object. And , if (value) => value <= getValues().regularPrice is not true then message after || will be acts as an error message.
+
+validate: (value) => value <= getValues().regularPrice || 'Discount should be less than the regular price.'
+
+We can get these formState from useForm() hook. And from fromState() we can get errors.
+
+Since , we had done some repetitive tasks like creating <Label> and Errors.
+
+So, let's now create their own component. Create a new file named as FormRow.jsx in the ui folder.
+
+
+---------------------- Lec_8 ---------------------
+
+"Uploading Images to Supabase"
+
+Go to CreateCabinForm.jsx and make image as required.
+Now , modify the data in the mutate function in onSubmit() function. Also go to FileInput component and give attr({type: "file"}) to the input element.
+
+
+After this go to apiCabin.js and upload the image.
+
+Now , go to Storage section in supabase and create a new policy so, that we can create a new bucket there. And for now allow all the operations.
+
+After this paste the code.
+
+
+
+----------------------- Lec_9 -------------------------
+
+"Editing a Cabin"
+
+Go to CabinRow.jsx and add a div for edit and create a state and after clicking on the edit button the form visibles.
+
+Now , send cainEditData to the CreateCabinForm.jsx 
+
+So, now , go to CreateCabinForm.jsx
+
+Go to apiCabins.js and rename the function from createCabin to createEditForm
+
+Now , go to CreateCabinForm.jsx
+

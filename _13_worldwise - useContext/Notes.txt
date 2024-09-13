@@ -1,0 +1,212 @@
+Lec_1 :-
+
+"Creating a CitiesContext"
+
+Create a new folder named as "contexts" in /src and there create a new file named CitiesContext.jsx
+
+After creating CitiesContext let's grab all the cities state and handler functions in the CitiesContext.jsx file.
+
+So, go to App.jsx and take all the states.
+
+Remove all the props from the child elements.
+
+
+
+
+Lec_2 :- 
+
+"Consuming the CitiesContext"
+
+go to CitiesContext.js and write the custom hook so, that we can access the value anywhere.
+
+And , we need this custom hook in CityList.jsx and CountryList.jsx
+
+
+
+
+Lec_3 :- 
+
+"Fetching the City View"
+
+go to City.jsx and we want that after clicking on the City at /app/city route then we'll get all the information regarding that city.
+
+But before this create a state in the CitiesContext.jsx file. And create also create a function named as getCity and then import them in the City.jsx file.
+
+Now , go to CityItem.jsx and apply conditional CSS. So, apply a .active class on the city which we had clicked currently.
+
+Create a new file named as BackButton.jsx in the components folder and place the back button code from Form.jsx to BackButton.jsx
+
+Now , apply this BackButton component in the Form.jsx and City.jsx
+
+
+
+Lec_4 :- 
+
+"Including a Map with the Leaflet Library"
+
+With react-leaflet we have to install it's base library also i.e. leaflet. Since , react-leaflet is built on the top of leaflet.
+
+npm i react-leaflet leaflet
+
+After this open the <Map/> component
+
+import the css library of Leaflet in index.css
+
+@import "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css";
+
+Also take the "Get Started" code from https://react-leaflet.js.org/
+
+Leaflet gives us some predefined Components like <MapContainer> , <TileLayer> , <Marker> and <Popup>
+
+You just need to import them.
+
+Besides Leaflet library we also have to put our own CSS classes as original Leaflet map has a height of 0.
+
+Now , change this URL to different one in the <TileLayer/> component.
+
+Also do scrollWheelZoom={true} 
+
+
+
+Lec_5 : 
+
+"Displaying City Markers on Map"
+
+Since , we need the access of Cities in the Map but their is no need of passing Props as we can access cities from Custom hook.
+
+Looping over cities and displaying one marker for each cities.
+
+<Marker position={mapPosition}>
+    <Popup>
+    A pretty CSS3 popup. <br /> Easily customizable.
+    </Popup>
+</Marker>
+
+
+
+Lec_6 :- 
+
+"Interacting With the Map"
+
+Due to the Query string we already have the position of currently selected city.
+
+Since , center of Map is not changing i.e. we need to create a function which will move the Marker.
+
+Now , create a function that whenever we click somewhere in the Map then we will re-direct to the /app/Form page.
+
+Storing lat and lng in the form URL also. And inside the form we can easily read that data from the URL.
+
+Wherever we click on the Map we can get the lat , lng just by 'e' so, if you print 'e' then you can get to know that e.latlng contains lat and lng.
+useMapEvents({
+
+    click: (e) => {
+
+      navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
+    },
+  });
+
+After clicking on the Map.  
+
+http://localhost:5173/app/form?lat=27.17740044682767&lng=77.99726486206056
+
+
+
+Lec_7 :- 
+
+"Setting Map Position With GeoLocation"
+
+Now , create a new folder named as hooks and then create a new file named as useGeolocation.js and place the code from jonas github.
+
+
+Lec_8 :- 
+
+"Fetching City Data in the Form"
+
+create a new custom hook named as useURLPosition.jsx 
+
+After this go to Map.jsx
+
+Now , get mapLat , mapLng from the custom hook.
+const [mapLat , mapLng] = useUrlPosition ();
+
+Also use this custom hook in the Form.jsx
+
+
+
+Lec_9 :- 
+
+"Creating a New City"
+
+Listen to the submit event in the Form.jsx <form onSubmit={}> element.
+
+npm i react-datepicker
+
+
+Now , instead of 
+<input
+    id="date"
+    onChange={(e) => setDate(e.target.value)}
+    value={date}
+/>
+
+We'll use datepicker component.
+
+Also import the CSS of it to make it look beautiful :- 
+
+import "react-datepicker/dist/react-datepicker.css";
+
+Now , in the citiesContext just like other functions create a new function named as createCity
+
+
+Lec_10 :- 
+
+"Deleting a City"
+
+go to cityItem and add a onClick event on the delete button.
+
+go to CitiesContext.js and create a deleteCity function
+
+
+
+Lec_11 : 
+
+"Advanced State Management System: Context + useReducer"
+
+go to CitiesContext.js
+
+
+Lec_12 : 
+
+"Adding Fake Authentication: Setting Up Context"
+
+Create another context named as FakeAuthContext.jsx
+
+
+Lec_13 :-
+
+"Adding Fake Authentication: Implementing ""Login"
+
+
+Go to App.jsx 
+
+Now , go to Login.jsx in pages folder
+
+Now , onSubmit={handleSubmit} in the Login.jsx form element.
+
+and also create handleSubmit function.
+
+Now go to User.jsx in the components folder
+
+Now , go to AppLayout and include the <User/> component.
+
+After this again go to <User/> component and do logout functionality
+
+
+
+Lec_14 :-
+
+"Adding Fake Authentication: Protecting a Route"
+
+Create a new page named as ProtectedRoute.jsx
+
+Go to App.jsx and enclose AppLayout component within the protected route.

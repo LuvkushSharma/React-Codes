@@ -1,0 +1,225 @@
+--------------- Lec_1 ---------------
+
+"Creating a Reducer: Bank Account"
+
+Create a new file named as store.js in the src folder. And this where we will write the pure Redux Code. So, basically Redux without React so, that we can really understand Redux in isolation first. And later , we will integrate both two.
+
+
+
+
+--------------- Lec_2 ---------------
+
+"Creating a Redux Store"
+
+
+So, what we did here was simply writing an object and a function. So, we didn't really use Redux yet, but now we need it.
+
+npm i redux
+
+Now , from redux import the createStore method.
+Now , to check the results of calling dispatch on store we will now go to index.js and there write some code.
+
+import "./store"; ---> will run the code in the store.js file.
+
+Now , if do console.log() in the store.js file then that will be printed the Browser's console.
+
+
+
+--------------- Lec_3 ---------------
+
+"Working With Action Creators"
+
+
+Now , create some action creators.
+So, basically we are going to create one action creator for each possible action.
+
+
+
+
+--------------- Lec_4 ---------------
+
+"Adding More State: Customer"
+
+
+Let's now create some more action creators and a reducer about the customer state.
+
+
+
+--------------- Lec_5 ---------------
+
+"Professional Redux File Structure: State Slices"
+
+Now , creating a new folder named as features.
+And create one folder for each folder.
+
+Now , move the AccountOperations.js file in the accounts folder.
+BalanceDisplay.js is also the part of the accounts folder.
+
+CreateCustomer.js is the part of the customers folder. And the same thing for the Customer.js
+
+Now , it's time to create a file for each feature about redux. 
+
+So, file named as accountSlice.js and customerSlice.js
+
+Now , move the inital states of account in the accountSlice.js together with the accountReducer and action creators.
+
+And also move the action creators , reducer and inital states of customer in the customerSlice.js
+
+Also export the reducers from their respective sliced files. Default export the reducers and named export the action creators.
+
+Now , go to store.js file and get all the Reducers imported. We donot need the action creators in the store.js file as we will import them in the components.
+
+import store from "./store" in the index.js as now we no longer need to run this file instead we want the store back.
+
+
+--------------- Lec_6 ---------------
+
+"Back to React! Connecting our Redux App With React"
+
+npm i react-redux
+
+Go to index.js and import Provider from react-redux package. And wrap our entire application in that provider. So again , just like we do with the Context API. And in the provider component pass the "store" prop. And , in that prop pass our Redux Store.
+
+So now our application knows about the Redux store which means that every single component in the application can now read data from the store and can dispatch actions to it.
+
+Now , go to Customer.js and read the state there by using store that we had broadcasted to all the child components.
+
+
+
+--------------- Lec_7 ---------------
+
+"Dispatching Actions from Our React App"
+
+
+Go to CreateCustomer.js file
+Now , once the customer has created it's account then we no longer wants the "Create new customer" form so basically, we need to hide that form. Go to App.js
+
+So, we need the current state in the App.js i.e. if no customer had created then display the <CreateCutsomer/> component else no. So, get the details via. useSelector() hook.
+
+After this go to AccountOperations.js file.
+
+
+
+
+--------------- Lec_8 ---------------
+
+"The Legacy Way of Connecting Components to Redux"
+
+
+Go to BalanceDisplay.js 
+
+
+
+
+--------------- Lec_9 ---------------
+
+"Making an API Call With Redux Thunks"
+
+Let's deposit 500 euros in the account. And so if that currency is different from US dollar, then we need to convert these 500 euros back to US dollars before they actually get deposited into the account. So before that deposit action is actually dispatched to the store. And so that's where now the Redux thunk comes into play.
+
+Inorder to use middleware (b/w dispatch and store) we need to follow three steps.
+
+Step-1 : Install the middleware
+Step-2 : Then we apply that middleware to our store.
+Step-3 : And finally, we use the middleware in our action creators.
+
+npm i redux-thunk
+
+Now , go to store.js 
+
+Go to accountSlice.js. Go to AccountOperations.js and also pass the currency while calling deposit action.
+
+Now , just show the customer some loading indicator. So, go to accountSlice.js and create a state for that.
+
+So, for that create a new action in the reducer :- 
+
+case "account/convertingCurrency":
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+Also after below dispatch :- 
+
+dispatch({ type: "account/deposit", payload: converted });
+
+set the isLoading to false.
+
+Now , go to AccountOperations.js and get that state (isLoading)
+
+--------------- Lec_10 ---------------
+
+"The Redux DevTools"
+
+
+Firstly install the Google Chrome Extension for "Redux DevTools"
+
+Now install corresponding npm package.
+
+npm i redux-devtools-extension --legacy-peer-deps
+
+Now , go to store.js and access that function.
+
+
+
+--------------- Lec_11 ---------------
+
+"Creating the Store With RTK"
+
+npm i @reduxjs/toolkit
+
+Go to store.js
+
+
+--------------- Lec_12 ---------------
+
+"Creating the Account Slice"
+
+
+Now remember how we had already organized all our code here into this concept of slices. So we have the initial state, we have the reducer and we also have the action creators down there in this file. And so now with Redux Toolkit, this idea of slices actually really got baked into Redux itself. So we now have this function called createSlice which we can import from Redux Toolkit.
+
+Firstly , it will automatically creates actions creators in the backend and secondly , it makes writing these reducers a lot easier. Because we no longer need that switch statement and also the default case is automatically handled. And third, we can actually mutate now, our state inside reducers. Behind the scenes it is using a library called "Immer" which will actually convert our logic back to immutable logic. So, behind the scenes, Redux still requires previous kind of logic that we had implemented.
+
+Go to accountSlice.js file and import createSlice method.
+
+
+
+
+--------------- Lec_13 ---------------
+
+"Back To Thunks"
+
+
+Go to accountSlice.js
+
+If we are passing more than one argument in the action then we just need to prepare it before overwriting. For e.g. in the AccountOperations.js file we are doing below thing in handleDeposit() function.
+
+dispatch(deposit(depositAmount, currency));
+
+So, we just need to prepare a one object just like we had done in the below code :- 
+
+prepare(amount, purpose) {
+        return {
+          payload: { amount, purpose },
+        };
+},
+
+And then reducer will get an object in the payload :- 
+
+reducer(state, action) {
+        if (state.loan > 0) return;
+
+        state.loan = action.payload.amount;
+        state.loanPurpose = action.payload.purpose;
+        state.balance = state.balance + action.payload.amount;
+},
+
+
+--------------- Lec_14 ---------------
+
+"Creating the Customer Slice"
+
+
+Go to customerSlice.js 
+
+Note : If you are including any side effects in the CreateSlice then just create a prepare method for that. Since , we need to follow the rule of making side-effects away from reducers.
